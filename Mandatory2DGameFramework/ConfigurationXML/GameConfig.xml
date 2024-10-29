@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GameConfig>
+    <World>
+        <MaxX>100</MaxX>
+        <MaxY>100</MaxY>
+        <Creatures>
+            <Creature>
+                <Name>Elvis</Name>
+                <PositionX>10</PositionX>
+                <PositionY>20</PositionY>
+                <HitPoints>30</HitPoints>
+                <AttackItems>
+                    <AttackItem>
+                        <Name>Dagger</Name>
+                        <HitPoints>5</HitPoints>
+                        <Range>1</Range>
+                    </AttackItem>
+                </AttackItems>
+                <DefenceItems>
+                    <DefenceItem>
+                        <Name>Shield</Name>
+                        <ReduceHitPoints>3</ReduceHitPoints>
+                    </DefenceItem>
+                </DefenceItems>
+            </Creature>
+        </Creatures>
+        <WorldObjects>
+            <WorldObject>
+                <Type>Wall</Type>
+                <PositionX>15</PositionX>
+                <PositionY>25</PositionY>
+                <Removable>false</Removable>
+            </WorldObject>
+            <WorldObject>
+                <Type>TreasureChest</Type>
+                <PositionX>20</PositionX>
+                <PositionY>30</PositionY>
+                <Removable>true</Removable>
+            </WorldObject>
+        </WorldObjects>
+    </World>
+</GameConfig>
