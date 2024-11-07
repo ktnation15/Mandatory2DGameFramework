@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Mandatory2DGameFramework.model.Creatures; // Include your model namespaces
 using Mandatory2DGameFramework.model.attack;
 using Mandatory2DGameFramework.model.defence;
-using Mandatory2DGameFramework.worlds;
+using Mandatory2DGameFramework.worlds; // Ensure this is the correct namespace for WorldObject
 
 namespace Mandatory2DGameFramework.ConfigurationXML
 {
@@ -56,17 +56,16 @@ namespace Mandatory2DGameFramework.ConfigurationXML
             // Read WorldObjects
             foreach (XElement worldObjectElement in worldElement.Element("WorldObjects")?.Elements("WorldObject") ?? Enumerable.Empty<XElement>())
             {
-                WorldObject worldObject = new WorldObject
+                // Explicitly specify the correct namespace for WorldObject
+                Mandatory2DGameFramework.worlds.WorldObject worldObject = new Mandatory2DGameFramework.worlds.WorldObject
                 {
-                    // Assuming you have a way to distinguish types
                     X = int.Parse(worldObjectElement.Element("PositionX")?.Value ?? "0"),
                     Y = int.Parse(worldObjectElement.Element("PositionY")?.Value ?? "0"),
-                    // You may want to create specific classes for different types of world objects.
                     Removable = bool.Parse(worldObjectElement.Element("Removable")?.Value ?? "false"),
-                    Type = worldObjectElement.Element("Type")?.Value ?? "Unknown" // Add a Type property to WorldObject
+                    Type = worldObjectElement.Element("Type")?.Value ?? "Unknown" // Add Type property to identify the type of WorldObject
                 };
 
-                world.AddWorldObject(worldObject);
+                world.AddWorldObject(worldObject); // Add the WorldObject to the World
             }
 
             return world;
