@@ -11,11 +11,9 @@ namespace Mandatory2DGameFramework.model.Creatures
         public AttackItem? Attack { get; set; }
         public DefenceItem? Defence { get; set; }
 
-        // Tilføj en Loot-metode, hvis den ikke allerede eksisterer
         public void Loot(WorldObject obj)
         {
             Console.WriteLine($"{Name} has looted a {obj.GetType().Name}!");
-            // Her kan du implementere logik for, hvordan looting fungerer.
         }
 
         public void ExecuteAttack(Creature target)

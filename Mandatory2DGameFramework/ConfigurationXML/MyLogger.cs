@@ -9,11 +9,36 @@ namespace Mandatory2DGameFramework.ConfigurationXML
         private const string LoggerName = "MyLogger.txt";
         private TraceSource traceSource;
 
-        public MyLogger()
+        // Privat statisk instans, der holder på Singleton-objektet
+        private static MyLogger instance;
+
+        // Locking object for tråd-sikkerhed
+        private static readonly object lockObj = new object();
+
+        // Privat konstruktør for at forhindre oprettelse af flere instanser
+        private MyLogger()
         {
             InitializeLogger();
         }
 
+        // Offentlig statisk metode til at få adgang til den eneste instans
+        public static MyLogger Instance
+        {
+            get
+            {
+                // Tråd-sikret oprettelse af Singleton instansen
+                lock (lockObj)
+                {
+                    if (instance == null)
+                    {
+                        instance = new MyLogger();
+                    }
+                    return instance;
+                }
+            }
+        }
+
+        // Initialiser loggeren og dens lyttere
         private void InitializeLogger()
         {
             traceSource = new TraceSource("MyLogger");
@@ -32,6 +57,7 @@ namespace Mandatory2DGameFramework.ConfigurationXML
             traceSource.Listeners.Add(new XmlWriterTraceListener($"{LoggerName}.xml"));
         }
 
+        // Metoder til at logge med forskellige eventtyper
         public void LogInformation(string message)
         {
             Log(message, TraceEventType.Information);
@@ -52,12 +78,14 @@ namespace Mandatory2DGameFramework.ConfigurationXML
             Log(message, TraceEventType.Critical);
         }
 
+        // Privat logmetode til at skrive med den angivne eventtype
         private void Log(string message, TraceEventType eventType)
         {
             traceSource.TraceEvent(eventType, 0, message);
             traceSource.Flush(); // Ensure all messages are written out
         }
 
+        // Luk loggeren korrekt
         public void Close()
         {
             traceSource.Close(); // Ensure to close the logger when done

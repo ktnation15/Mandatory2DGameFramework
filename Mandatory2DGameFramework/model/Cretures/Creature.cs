@@ -4,13 +4,13 @@ using Mandatory2DGameFramework.model.attack;
 using Mandatory2DGameFramework.model.defence;
 using Mandatory2DGameFramework.model.Patterns.Strategy;
 
-public class Creature : IObservable<Creature>  // Implementing IObservable with Creature as the type parameter
+public class Creature : IObservable<Creature>  // Implementerer IObservable med Creature som typeparameter
 {
-    private readonly List<IObserver<Creature>> _observers = new List<IObserver<Creature>>();  // List of observers
+    private readonly List<IObserver<Creature>> _observers = new List<IObserver<Creature>>();  // Liste af observatører
 
     private int _hitPoint;
 
-    // Position properties
+    // Position
     public int X { get; set; }
     public int Y { get; set; }
 
@@ -22,7 +22,7 @@ public class Creature : IObservable<Creature>  // Implementing IObservable with 
         set
         {
             _hitPoint = value;
-            NotifyObservers();  // Notify observers if HitPoint changes
+            NotifyObservers();  // Underret observatører hvis HitPoint ændres
         }
     }
 
@@ -40,19 +40,19 @@ public class Creature : IObservable<Creature>  // Implementing IObservable with 
         Defence = null;
     }
 
-    // Method to perform an attack
+    // Metode til at udføre et angreb
     public void PerformAttack(Creature target)
     {
         AttackStrategy?.Attack(this, target);
     }
 
-    // Method to return the hit damage value
+    // Metode til at returnere skadevurderingen
     public int Hit()
     {
         return Attack?.Hit ?? 0;
     }
 
-    // Method to receive damage and apply defense reduction
+    // Metode til at modtage skade og anvende forsvarsreduktion
     public void ReceiveHit(int hit)
     {
         int reduction = Defence?.ReduceHitPoints ?? 0;
@@ -60,7 +60,7 @@ public class Creature : IObservable<Creature>  // Implementing IObservable with 
         if (HitPoint < 0) HitPoint = 0;
     }
 
-    // Method to loot items (AttackItem or DefenceItem)
+    // Metode til at plyndre genstande (AttackItem eller DefenceItem)
     public void Loot(WorldObject obj)
     {
         if (obj is AttackItem attackItem)
@@ -73,37 +73,37 @@ public class Creature : IObservable<Creature>  // Implementing IObservable with 
         }
         else
         {
-            Console.WriteLine("Loot item is neither an AttackItem nor a DefenceItem.");
+            Console.WriteLine("Loot-genstand er hverken en AttackItem eller en DefenceItem.");
         }
     }
 
-    // Method to set position
+    // Metode til at sætte position
     public void SetPosition(int x, int y)
     {
         X = x;
         Y = y;
     }
 
-    // Implementing IObservable<Creature>
+    // Implementering af IObservable<Creature>
     public IDisposable Subscribe(IObserver<Creature> observer)
     {
         if (!_observers.Contains(observer))
         {
             _observers.Add(observer);
         }
-        return new Unsubscriber(_observers, observer);  // Returning an Unsubscriber to allow unsubscription
+        return new Unsubscriber(_observers, observer);  // Returnerer en Unsubscriber til at tillade afmelding
     }
 
-    // Notify all observers about the state change (e.g., HitPoint change)
+    // Underret alle observatører om en tilstandsændring (fx HitPoint ændring)
     private void NotifyObservers()
     {
         foreach (var observer in _observers)
         {
-            observer.OnNext(this);  // Notifying observers about the change
+            observer.OnNext(this);  // Underret observatørerne om ændringen
         }
     }
 
-    // Unsubscriber class to unsubscribe from the observer list
+    // Unsubscriber-klasse til at afmelde fra observatørlisten
     private class Unsubscriber : IDisposable
     {
         private readonly List<IObserver<Creature>> _observers;
@@ -119,12 +119,12 @@ public class Creature : IObservable<Creature>  // Implementing IObservable with 
         {
             if (_observers.Contains(_observer))
             {
-                _observers.Remove(_observer);  // Removes the observer from the list
+                _observers.Remove(_observer);  // Fjerner observatøren fra listen
             }
         }
     }
 
-    // Overriding ToString to provide a better creature description
+    // Overskriver ToString for at give en bedre beskrivelse af væsenet
     public override string ToString()
     {
         return $"{{{nameof(Name)}={Name}, {nameof(HitPoint)}={HitPoint}, {nameof(Attack)}={Attack?.ToString() ?? "None"}, {nameof(Defence)}={Defence?.ToString() ?? "None"}}}";
